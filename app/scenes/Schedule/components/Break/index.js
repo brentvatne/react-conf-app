@@ -1,10 +1,12 @@
 // @flow
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 import theme from '../../../../theme';
 import { TalkStatusBar } from '../Talk';
+
+import { Components } from 'exponent';
+const { LinearGradient } = Components;
 
 const gradientSteps = 14;
 const gradientJump = 1.04;

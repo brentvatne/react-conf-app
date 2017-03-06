@@ -16,7 +16,7 @@ import moment from 'moment';
 
 import type { ScheduleTalk } from '../../types';
 
-import Splash from 'react-native-smart-splash-screen';
+// import Splash from 'react-native-smart-splash-screen';
 
 import { TIME_FORMAT } from '../../constants';
 import talks, {
@@ -130,13 +130,13 @@ export default class Schedule extends Component {
     );
 
     // This is the actual image splash screen, not the animated one.
-    if (Splash) {
-      Splash.close({
-        animationType: Splash.animationType.fade,
-        duration: 300,
-        delay: 200,
-      });
-    }
+    // if (Splash) {
+    //   Splash.close({
+    //     animationType: Splash.animationType.fade,
+    //     duration: 300,
+    //     delay: 200,
+    //   });
+    // }
   }
   componentWillUnmount() {
     if (this.scrollYListener)
