@@ -66,15 +66,6 @@ export default class SplashScreen extends Component {
     });
   }
 
-  componentDidUpdate() {
-    const { animationComplete, logoOffset, logoScale } = this.state;
-
-    if (animationComplete) {
-      logoOffset.setValue(80);
-      logoScale.setValue(0.8);
-    }
-  }
-
   queueIdleAnimation = () => {
     const { leftTriangleSkew, rightTriangleSkew } = this.state;
 

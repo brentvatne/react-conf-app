@@ -171,7 +171,7 @@ export default class Schedule extends Component {
     const { dataSource, scrollY, showNowButton } = this.state;
 
     const navbarTop = scrollY.interpolate({
-      inputRange: [80, 120],
+      inputRange: [80, 124],
       outputRange: [-64, 0],
       extrapolate: "clamp"
     });
