@@ -44,10 +44,10 @@ const fontSize = {
 
 // navbar
 const navbar = {
-	backgroundColor: color.splashBg,
+	backgroundColor: color.sceneBg,
 	buttonColor: color.blue,
 	height: 64,
-	textColor: color.sceneBg,
+	textColor: color.text,
 };
 
 // list header

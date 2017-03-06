@@ -19,11 +19,11 @@ export default class Break extends Component {
 	};
 
 	render () {
-		const { important, startTime, status } = this.props;
+		const { important, startTime, status, ...props } = this.props;
 		const title = this.props.title || 'Break';
 
 		return (
-			<View style={[styles.base, styles['base__' + status]]}>
+			<View style={[styles.base, styles['base__' + status]]} {...props}>
 				<TalkStatusBar status={status} />
 				{important ? (
 					<View style={styles.gradient}>

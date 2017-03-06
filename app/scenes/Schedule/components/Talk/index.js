@@ -23,7 +23,7 @@ type Status = 'past' | 'present' | 'future';
 
 export function TalkSeparator ({ status }: { status: Status }) {
 	let barColor = theme.color.gray20;
-	if (status === 'past') barColor = lighten(theme.color.blue, 40);
+	if (status === 'past') barColor = lighten(theme.color.blue, 50);
 	else if (status === 'present') barColor = theme.color.blue;
 
 	return (
@@ -45,7 +45,7 @@ export function TalkSeparator ({ status }: { status: Status }) {
 
 export function TalkStatusBar ({ status, ...props }: { status: Status }) {
 	let barColor = theme.color.gray20;
-	if (status === 'past') barColor = lighten(theme.color.blue, 40);
+	if (status === 'past') barColor = lighten(theme.color.blue, 50);
 	if (status === 'present') barColor = theme.color.blue;
 
 	return (

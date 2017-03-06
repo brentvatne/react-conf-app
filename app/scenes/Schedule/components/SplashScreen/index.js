@@ -15,6 +15,9 @@ const windowHeight = Dimensions.get('window').height;
 const SLIDE_DURATION = 800;
 const SLIDE_FINAL_HEIGHT = 400;
 
+const HEIGHT_OFFSET = 200;
+const STATUSBAR_HEIGHT = 20;
+
 const SKEW_DELAY = 3000;
 const SKEW_DURATION = 2000;
 const SKEW_UP = -3;
@@ -101,7 +104,7 @@ export default class SplashScreen extends Component {
 		return (
 			<View style={styles.wrapper}>
 				{/* I'm a spacer to push other content below me down */}
-				<View style={{ height: SLIDE_FINAL_HEIGHT - 220 }} />
+				<View style={{ height: SLIDE_FINAL_HEIGHT - (HEIGHT_OFFSET + STATUSBAR_HEIGHT) }} />
 					{/* The actual splash screen */}
 					<Animated.View
 						style={[styles.splash, { height }]}
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		alignItems: 'center',
 		justifyContent: 'center',
-		top: -200,
+		top: -HEIGHT_OFFSET,
 		left: 0,
 		right: 0,
 	},

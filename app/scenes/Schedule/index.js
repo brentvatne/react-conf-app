@@ -38,7 +38,6 @@ type Props = {
 type State = {
 	animatingSplash: boolean,
 	dataSource: Object,
-	scrollY: Animated.Value,
 	showNowButton?: boolean,
 	activeTalkLayout?: {
 		height: number,
@@ -99,18 +98,21 @@ export default class Schedule extends Component {
 		this.state = {
 			animatingSplash: true,
 			dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
-			scrollY: new Animated.Value(0),
 		};
 
-		this.state.scrollY.addListener(({ value }) => {
-			if (value >= 40 && value <= 140) {
-				StatusBar.setHidden(true, true);
-			} else {
-				StatusBar.setHidden(false, true);
+		this.scrollY = new Animated.Value(0);
+
+		this.scrollY.addListener(({ value }) => {
+			if (value >= 120) {
+				StatusBar.setBarStyle('default', true);
+			} else if (value <= 80) {
+				StatusBar.setBarStyle('light-content', true);
 			}
 		});
 	}
 	componentDidMount () {
+		this._navigatorWillFocusSubscription = this.props.navigator.navigationContext.addListener('willfocus', this.handleNavigatorWillFocus);
+
 		// This is the actual image splash screen, not the animated one.
 		if (Splash) {
 			Splash.close({
@@ -118,6 +120,16 @@ export default class Schedule extends Component {
 				duration: 300,
 				delay: 200,
 			});
+		}
+	}
+	componentWillUnmount () {
+		this._navigatorWillFocusSubscription.remove();
+	}
+	handleNavigatorWillFocus = (event) => {
+		const { scene } = event.data.route;
+
+		if (scene === 'Schedule' && this.scrollY._value < 120) {
+			StatusBar.setBarStyle('light-content', true);
 		}
 	}
 	gotoEventInfo = () => {
@@ -146,6 +158,7 @@ export default class Schedule extends Component {
 	};
 	scrolltoActiveTalk = () => {
 		const { activeTalkLayout } = this.state;
+
 		if (!activeTalkLayout) return;
 		const { contentLength } = this.refs.listview.scrollProperties;
 		const sceneHeight = Dimensions.get('window').height;
@@ -162,11 +175,11 @@ export default class Schedule extends Component {
 	}
 	render () {
 		const { navigator, talks } = this.props;
-		const { animatingSplash, dataSource, scrollY, showNowButton } = this.state;
+		const { animatingSplash, dataSource, showNowButton } = this.state;
 
-		const navbarTop = scrollY.interpolate({
+		const navbarTop = this.scrollY.interpolate({
 			inputRange: [80, 120],
-			outputRange: [-64, 0],
+			outputRange: [-theme.navbar.height, 0],
 			extrapolate: 'clamp',
 		});
 
@@ -199,18 +212,16 @@ export default class Schedule extends Component {
 					/>
 				</Animated.View>
 
-				{/* Spacer for the headings to stick correctly */}
-				{animatingSplash
-					? <View style={[styles.spacer, { backgroundColor: 'transparent' }]} />
-					: <View style={styles.spacer} />
-				}
-
 				<ListView
 					dataSource={dataSource}
 					ref="listview"
 					initialListSize={initialListSize}
+					style={{
+						borderTopColor: 'transparent',
+						borderTopWidth: theme.navbar.height,
+					}}
 					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }]
+						[{ nativeEvent: { contentOffset: { y: this.scrollY } } }]
 					)}
 					scrollEventThrottle={16}
 					onChangeVisibleRows={this.onChangeVisibleRows}
@@ -227,12 +238,24 @@ export default class Schedule extends Component {
 					renderRow={(talk) => {
 						const status = getTalkStatus(talk.time.start, talk.time.end);
 
+						const onLayout = status === 'present'
+							? ({ nativeEvent: { layout } }) => {
+								this.setState({
+									activeTalkLayout: {
+										height: layout.height,
+										position: layout.y - theme.listheader.height,
+									},
+								});
+							}
+							: null;
+
 						if (talk.break) {
 							return (
 								<Break
 									endTime={moment(talk.time.end).format(TIME_FORMAT)}
-									startTime={moment(talk.time.start).format(TIME_FORMAT)}
 									important={!!talk.important}
+									onLayout={onLayout}
+									startTime={moment(talk.time.start).format(TIME_FORMAT)}
 									status={status}
 									title={talk.title}
 								/>
@@ -253,17 +276,6 @@ export default class Schedule extends Component {
 								},
 							});
 						};
-
-						const onLayout = status === 'present'
-							? ({ nativeEvent: { layout } }) => {
-								this.setState({
-									activeTalkLayout: {
-										height: layout.height,
-										position: layout.y - theme.navbar.height / 2,
-									},
-								});
-							}
-							: null;
 
 						return (
 							<Talk
@@ -301,11 +313,6 @@ const styles = StyleSheet.create({
 		right: 0,
 		left: 0,
 		zIndex: 2,
-	},
-	spacer: {
-		backgroundColor: theme.color.splashBg,
-		height: theme.navbar.height + 2,
-		zIndex: 1,
 	},
 	link: {
 		color: theme.color.blue,

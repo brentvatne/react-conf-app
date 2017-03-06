@@ -26,8 +26,10 @@ export default function ListTitle ({ bordered, text }: Props) {
 			justifyContent: 'flex-end',
 		},
 		view__bordered: {
-			borderTopColor: theme.color.gray20,
-			borderTopWidth: 1 / PixelRatio.get(),
+			shadowColor: theme.color.gray20,
+			shadowOffset: { height: -1 / PixelRatio.get(), width: 0 },
+			shadowOpacity: 1,
+			shadowRadius: 0,
 		},
 	};
 

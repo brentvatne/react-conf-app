@@ -100,7 +100,7 @@ export default function Navbar ({
 const styles = StyleSheet.create({
 	container: {
 		alignItems: 'stretch',
-		borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+		borderBottomColor: theme.color.gray20,
 		borderBottomWidth: 1 / PixelRatio.get(),
 		flexDirection: 'row',
 		height: theme.navbar.height,
@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		paddingTop: 20, // account for the statusbar
 		position: 'absolute',
+		top: 0,
 		width: Dimensions.get('window').width,
 	},
 

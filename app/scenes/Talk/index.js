@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { ActionSheetIOS, Animated, Dimensions } from 'react-native';
+import { ActionSheetIOS, Animated, Dimensions, StatusBar } from 'react-native';
 import moment from 'moment';
 
 import type { ScheduleTalk } from '../../types';
@@ -77,6 +77,10 @@ export default class Talk extends Component {
 
 	sceneHeight = Dimensions.get('window').height;
 	sceneWidth = Dimensions.get('window').width;
+
+	componentDidMount () {
+		StatusBar.setBarStyle('default', true);
+	}
 
 	handleLayout ({ height }: { height: number }) {
 		const availableHeight = this.sceneHeight - (height);
