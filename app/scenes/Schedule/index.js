@@ -16,8 +16,6 @@ import moment from 'moment';
 
 import type { ScheduleTalk } from '../../types';
 
-// import Splash from 'react-native-smart-splash-screen';
-
 import { TIME_FORMAT } from '../../constants';
 import talks, {
   getIndexFromId,
@@ -41,6 +39,7 @@ type Props = {
 };
 
 type State = {
+  hasScrolled: boolean,
   dataSource: Object,
   scrollY: Animated.Value,
   showNowButton?: boolean,
@@ -62,10 +61,13 @@ type ChangedRows = {
   },
 };
 
+const AnimatedListView = Animated.createAnimatedComponent(ListView);
+
 export default class Schedule extends Component {
   props: Props;
   state: State;
   scrollYListener: string;
+  _listview: any;
   _navigatorWillFocusSubscription: Object;
 
   static defaultProps = {
@@ -106,11 +108,15 @@ export default class Schedule extends Component {
     this.state = {
       dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
       scrollY: new Animated.Value(0),
+      hasScrolled: false,
     };
 
     if (Platform.OS === 'ios') {
       // This isn't relevant on Android.
       this.scrollYListener = this.state.scrollY.addListener(({ value }) => {
+        if (!this.state.hasScrolled) {
+          this.setState({ hasScrolled: true });
+        }
         if (value > 120) {
           StatusBar.setBarStyle('default', true);
           StatusBar.setHidden(false, true);
@@ -123,21 +129,18 @@ export default class Schedule extends Component {
       });
     }
   }
+
+  componentWillUnmount() {
+    this.state.scrollY.removeListener(this.scrollYListener);
+  }
+
   componentDidMount() {
     this._navigatorWillFocusSubscription = this.props.navigator.navigationContext.addListener(
       'willfocus',
       this.handleNavigatorWillFocus
     );
-
-    // This is the actual image splash screen, not the animated one.
-    // if (Splash) {
-    //   Splash.close({
-    //     animationType: Splash.animationType.fade,
-    //     duration: 300,
-    //     delay: 200,
-    //   });
-    // }
   }
+
   componentWillUnmount() {
     if (this.scrollYListener)
       this.state.scrollY.removeListener(this.scrollYListener);
@@ -182,14 +185,14 @@ export default class Schedule extends Component {
   scrolltoActiveTalk = () => {
     const { activeTalkLayout } = this.state;
     if (!activeTalkLayout) return;
-    const { contentLength } = this.refs.listview.scrollProperties;
+    const { contentLength } = this._listview.scrollProperties;
     const sceneHeight = Dimensions.get('window').height;
     const maxScroll = contentLength - (sceneHeight + theme.navbar.height);
     const scrollToY = maxScroll < activeTalkLayout.position
       ? maxScroll
       : activeTalkLayout.position;
 
-    this.refs.listview.scrollTo({ y: scrollToY, animated: true });
+    this._listview.scrollTo({ y: scrollToY, animated: true });
   };
   toggleNowButton(showNowButton: boolean) {
     LayoutAnimation.easeInEaseOut();
@@ -215,8 +218,7 @@ export default class Schedule extends Component {
       <TouchableOpacity
         key="footer"
         onPress={this.gotoEventInfo}
-        activeOpacity={0.75}
-      >
+        activeOpacity={0.75}>
         <Text style={styles.link}>
           Event Info
         </Text>
@@ -231,10 +233,19 @@ export default class Schedule extends Component {
       <Scene>
         <SplashScreen
           onLogoPress={this.gotoEventInfo}
-          style={{ top: splashTop }}
+          style={{ transform: [{ translateY: splashTop }] }}
         />
 
-        <Animated.View style={[styles.navbar, { top: navbarTop }]}>
+        <Animated.View
+          style={[
+            styles.navbar,
+            {
+              // Small bug with native animations in iOS doesn't set the
+              // transform properly on initial render, should be fixed in 0.42
+              opacity: this.state.hasScrolled ? 1 : 0,
+              transform: [{ translateY: navbarTop }],
+            },
+          ]}>
           <Navbar
             title="Schedule"
             rightButtonText="About"
@@ -245,14 +256,17 @@ export default class Schedule extends Component {
         {/* Spacer for the headings to stick correctly */}
         <View style={styles.spacer} />
 
-        <ListView
+        <AnimatedListView
           dataSource={dataSource}
-          ref="listview"
+          ref={view => {
+            this._listview = view;
+          }}
           initialListSize={initialListSize}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: this.state.scrollY } } },
-          ])}
-          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
+            { useNativeDriver: true }
+          )}
+          scrollEventThrottle={1}
           onChangeVisibleRows={this.onChangeVisibleRows}
           enableEmptySections
           removeClippedSubviews={false}
