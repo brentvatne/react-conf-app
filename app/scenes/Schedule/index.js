@@ -97,7 +97,7 @@ export default class Schedule extends Component {
       dataBlob[sID + ':' + talk.id] = talk;
     });
 
-    const ds = new ListView.DataSource({
+    let ds = new ListView.DataSource({
       getSectionData: (dataBlob, sectionID) => dataBlob[sectionID],
       getRowData: (dataBlob, sectionID, rowID) =>
         dataBlob[sectionID + ':' + rowID],
@@ -105,20 +105,28 @@ export default class Schedule extends Component {
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
     });
 
+    if (Platform.OS === 'ios') {
+      setTimeout(
+        () => {
+          this.setState({
+            dataSource: ds.cloneWithRowsAndSections(
+              dataBlob,
+              sectionIDs,
+              rowIDs
+            ),
+          });
+        },
+        150
+      );
+    } else {
+      ds = ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs);
+    }
+
     this.state = {
       dataSource: ds,
       scrollY: new Animated.Value(0),
-      hasScrolled: false,
+      hasScrolled: Platform.OS === 'android',
     };
-
-    setTimeout(
-      () => {
-        this.setState({
-          dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
-        });
-      },
-      150
-    );
 
     if (Platform.OS === 'ios') {
       // This isn't relevant on Android.
@@ -126,6 +134,7 @@ export default class Schedule extends Component {
         if (!this.state.hasScrolled) {
           this.setState({ hasScrolled: true });
         }
+
         if (value > 120) {
           StatusBar.setBarStyle('default', true);
           StatusBar.setHidden(false, true);

@@ -44,27 +44,35 @@ export default class SplashScreen extends Component {
   skewed = false;
 
   componentDidMount() {
-    const animateTo = toValue => {
-      return {
-        delay: 200,
-        duration: SLIDE_DURATION,
-        toValue,
-      };
-    };
-    Animated.parallel([
-      Animated.timing(this.state.logoOffset, animateTo(80)),
-      Animated.timing(this.state.logoScale, animateTo(0.8)),
-      Animated.timing(
-        this.state.height,
-        animateTo(SLIDE_FINAL_HEIGHT + theme.navbar.height)
-      ),
-    ]).start(() => {
-      if (this.props.onAnimationComplete) {
-        this.props.onAnimationComplete();
-      }
+    if (Platform.OS === 'android') {
+      this.state.logoOffset.setValue(80);
+      this.state.logoScale.setValue(0.8);
+      this.state.height.setValue(SLIDE_FINAL_HEIGHT + theme.navbar.height);
       this.setState({ animationComplete: true });
       this.queueIdleAnimation();
-    });
+    } else {
+      const animateTo = toValue => {
+        return {
+          delay: 200,
+          duration: SLIDE_DURATION,
+          toValue,
+        };
+      };
+      Animated.parallel([
+        Animated.timing(this.state.logoOffset, animateTo(80)),
+        Animated.timing(this.state.logoScale, animateTo(0.8)),
+        Animated.timing(
+          this.state.height,
+          animateTo(SLIDE_FINAL_HEIGHT + theme.navbar.height)
+        ),
+      ]).start(() => {
+        if (this.props.onAnimationComplete) {
+          this.props.onAnimationComplete();
+        }
+        this.setState({ animationComplete: true });
+        this.queueIdleAnimation();
+      });
+    }
   }
 
   componentDidUpdate() {
@@ -125,7 +133,14 @@ export default class SplashScreen extends Component {
     });
 
     return (
-      <Animated.View style={[styles.wrapper, this.props.style]}>
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          styles.wrapper,
+          this.props.style,
+          Platform.OS === 'android' && { height: 1200 },
+        ]}
+      >
         {/* The actual splash screen */}
         <Animated.View style={[styles.splash, { height }]}>
           <Animated.TouchableHighlight
