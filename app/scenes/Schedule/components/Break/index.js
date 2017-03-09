@@ -26,8 +26,8 @@ export default class Break extends Component {
     const contentProps = lightning || Platform.OS === 'android'
       ? { style: styles.gradient }
       : {
-          start: { x: 0.0, y: 0.15 },
-          end: { x: 1.0, y: 0.3 },
+          start: [0.0, 0.15],
+          end: [1.0, 0.3],
           locations: generateGradientLocations(gradientSteps),
           colors: generateGradientColors(gradientSteps),
           style: styles.gradient,

@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
-import Exponent, { Asset } from 'exponent';
+import Exponent, { Asset, Font } from 'exponent';
+import Ionicons from '@exponent/vector-icons/Ionicons';
 import { AppState, Navigator, StatusBar, StyleSheet } from 'react-native';
 
 import theme from './theme';
@@ -24,6 +25,7 @@ class ReactConf2017 extends Component {
     await Promise.all([
       downloadAsset(require('./scenes/Schedule/images/splash-logo.png')),
       downloadAsset(require('./scenes/Info/images/thinkmill-logo.png')),
+      Font.loadAsync(Ionicons.font),
     ]);
 
     this.setState({ ready: true });

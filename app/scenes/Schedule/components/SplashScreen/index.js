@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Dimensions,
+  Platform,
   Image,
   StyleSheet,
   TouchableHighlight,
@@ -49,7 +51,6 @@ export default class SplashScreen extends Component {
         toValue,
       };
     };
-
     Animated.parallel([
       Animated.timing(this.state.logoOffset, animateTo(80)),
       Animated.timing(this.state.logoScale, animateTo(0.8)),
@@ -118,12 +119,13 @@ export default class SplashScreen extends Component {
       });
     };
 
-    const wrapperHeight = Animated.add(height, new Animated.Value(-200));
+    const logoSplashAlignmentOffset = logoOffset.interpolate({
+      inputRange: [0, 80],
+      outputRange: Platform.OS === 'ios' ? [-17.5, 5] : [0, 0],
+    });
 
     return (
-      <Animated.View
-        style={[styles.wrapper, this.props.style, { height: wrapperHeight }]}
-      >
+      <Animated.View style={[styles.wrapper, this.props.style]}>
         {/* The actual splash screen */}
         <Animated.View style={[styles.splash, { height }]}>
           <Animated.TouchableHighlight
@@ -136,7 +138,12 @@ export default class SplashScreen extends Component {
               zIndex: 2,
             }}
           >
-            <Image source={require('../../images/splash-logo.png')} />
+            <Animated.Image
+              source={require('../../images/splash-logo.png')}
+              style={{
+                transform: [{ translateY: logoSplashAlignmentOffset }],
+              }}
+            />
           </Animated.TouchableHighlight>
           <Animated.View
             style={[

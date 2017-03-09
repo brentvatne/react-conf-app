@@ -106,10 +106,19 @@ export default class Schedule extends Component {
     });
 
     this.state = {
-      dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+      dataSource: ds,
       scrollY: new Animated.Value(0),
       hasScrolled: false,
     };
+
+    setTimeout(
+      () => {
+        this.setState({
+          dataSource: ds.cloneWithRowsAndSections(dataBlob, sectionIDs, rowIDs),
+        });
+      },
+      150
+    );
 
     if (Platform.OS === 'ios') {
       // This isn't relevant on Android.
@@ -218,7 +227,8 @@ export default class Schedule extends Component {
       <TouchableOpacity
         key="footer"
         onPress={this.gotoEventInfo}
-        activeOpacity={0.75}>
+        activeOpacity={0.75}
+      >
         <Text style={styles.link}>
           Event Info
         </Text>
@@ -245,7 +255,8 @@ export default class Schedule extends Component {
               opacity: this.state.hasScrolled ? 1 : 0,
               transform: [{ translateY: navbarTop }],
             },
-          ]}>
+          ]}
+        >
           <Navbar
             title="Schedule"
             rightButtonText="About"
