@@ -55,11 +55,9 @@ fastlane/screenshots
 
 
 # Android secrets
-<<<<<<< HEAD
 android/**/*/res/values/configuration.xml
 android/**/*/res/values/google_maps_api_key.xml
 android/**/*.keystore
-=======
 **/*/res/values/configuration.xml
 
 # macOS
@@ -67,4 +65,3 @@ android/**/*.keystore
 
 # exponent
 .exponent/**/*
->>>>>>> Use Exponent
