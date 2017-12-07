@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Icon from '@exponent/vector-icons/Ionicons';
+import Icon from '@expo/vector-icons/Ionicons';
 
 import Avatar from '../../../../components/Avatar';
 import DraggableView from '../../../../components/DraggableView';
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     lineHeight: 21,
     textAlign: 'center',
-    // width: '80%', //TODO(cem2ran): enable when Exponent v15 is available.
+    // width: '80%', //TODO(cem2ran): enable when Expo v15 is available.
   },
 
   // buttons

@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import Icon from '@exponent/vector-icons/Ionicons';
+import Icon from '@expo/vector-icons/Ionicons';
 import {
   ScrollView,
   StyleSheet,

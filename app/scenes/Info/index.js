@@ -11,8 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Components } from 'exponent';
-const { MapView } = Components;
+import { MapView } from 'expo';
 
 import ListTitle from '../../components/ListTitle';
 import Navbar from '../../components/Navbar';
@@ -51,7 +50,7 @@ export default class Info extends Component {
 
   componentDidMount() {
     // Sometimes it takes more than a second for the map to load, so in those cases it's best to
-    // just keep trying with an exponential* back off. (* exponential: e to the power of 0) ;-)
+    // just keep trying with an expoial* back off. (* expoial: e to the power of 0) ;-)
     const tryToShowCallout = () => {
       if (this._marker) {
         this._marker.showCallout();

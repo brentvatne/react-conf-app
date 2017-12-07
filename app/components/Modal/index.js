@@ -9,8 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Components } from 'exponent';
-const { BlurView } = Components;
+import { BlurView } from 'expo';
 
 function animateToValueWithOptions(val) {
   return {

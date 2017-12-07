@@ -10,8 +10,7 @@ import {
 import theme from '../../../../theme';
 import { lighten, darken } from '../../../../utils/color';
 
-import { Components } from 'exponent';
-const { LinearGradient } = Components;
+import { LinearGradient } from 'expo';
 
 export default class NowButton extends Component {
   props: {

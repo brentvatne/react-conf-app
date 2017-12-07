@@ -1,10 +1,10 @@
 // @flow
 import React, { Component } from 'react';
 import { Animated, Dimensions, Easing } from 'react-native';
-import Icon from '@exponent/vector-icons/Ionicons';
-import { Components } from 'exponent';
+import Icon from '@expo/vector-icons/Ionicons';
+import { LinearGradient } from 'expo';
 
-const Gradient = Animated.createAnimatedComponent(Components.LinearGradient);
+const Gradient = Animated.createAnimatedComponent(LinearGradient);
 
 import theme from '../../../../theme';
 import { fade } from '../../../../utils/color';

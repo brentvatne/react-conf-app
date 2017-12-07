@@ -1,15 +1,10 @@
 // @flow
 import React, { Component } from 'react';
-import Exponent, { Asset, Constants, Font } from 'exponent';
-import Ionicons from '@exponent/vector-icons/Ionicons';
-import {
-  AppState,
-  Platform,
-  Navigator,
-  StatusBar,
-  StyleSheet,
-  View,
-} from 'react-native';
+import Expo, { Asset, Constants, Font } from 'expo';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native';
+
+import { Navigator } from 'react-native-deprecated-custom-components';
 
 import theme from './theme';
 import { Info, Schedule, Talk } from './scenes';
@@ -17,7 +12,7 @@ const Scenes = { Info, Schedule, Talk };
 
 const DEFAULT_VIEW = 'Schedule';
 
-class ReactConf2017 extends Component {
+export default class ReactConf2017 extends Component {
   state = {
     ready: false,
   };
@@ -83,13 +78,22 @@ class ReactConf2017 extends Component {
           configureScene={configureScene}
           initialRoute={{ scene: DEFAULT_VIEW, index: 0 }}
           renderScene={renderScene}
-          sceneStyle={styles.scenes}
+          sceneStyle={sceneStyle}
           style={styles.navigator}
         />
       </View>
     );
   }
 }
+
+const sceneStyle = {
+  backgroundColor: theme.color.sceneBg,
+  overflow: 'visible',
+  shadowColor: 'black',
+  shadowOffset: { height: 0, width: 0 },
+  shadowOpacity: 0.33,
+  shadowRadius: 5,
+};
 
 const styles = StyleSheet.create({
   navigator: {
@@ -110,5 +114,3 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
 });
-
-module.exports = ReactConf2017;

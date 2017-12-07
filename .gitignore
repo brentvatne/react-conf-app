@@ -63,5 +63,5 @@ android/**/*.keystore
 # macOS
 .DS_Store
 
-# exponent
-.exponent/**/*
+# expo
+.expo/**/*

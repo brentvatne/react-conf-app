@@ -1,5 +1,11 @@
 // @flow
-import Exponent from 'exponent';
-import ReactConf2017 from './app/ReactConf2017';
+import Expo from 'expo';
+import React from 'react';
+import PropTypes from 'prop-types';
+import createClass from 'create-react-class';
+React.PropTypes = PropTypes;
+React.createClass = createClass;
 
-Exponent.registerRootComponent(ReactConf2017);
+const ReactConf2017 = require('./app/ReactConf2017').default;
+
+Expo.registerRootComponent(ReactConf2017);
