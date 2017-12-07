@@ -1,5 +1,6 @@
 // @flow
 import { Platform } from 'react-native';
+import isIPhoneX from 'react-native-is-iphonex';
 
 // ==============================
 // APP STYLE CONSTANTS
@@ -44,10 +45,12 @@ const fontSize = {
 // ------------------------------
 
 // navbar
+
+const NotchHeight = isIPhoneX ? 20 : 0;
 const navbar = {
   backgroundColor: 'white',
   buttonColor: color.blue,
-  height: Platform.OS === 'ios' ? 64 : 44,
+  height: Platform.OS === 'ios' ? 64 + NotchHeight : 44,
   textColor: color.text,
 };
 

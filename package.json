@@ -17,7 +17,8 @@
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "github:expo/react-native#sdk-23.0.0",
-    "react-native-deprecated-custom-components": "^0.1.1"
+    "react-native-deprecated-custom-components": "^0.1.1",
+    "react-native-is-iphonex": "1.0.1"
   },
   "devDependencies": {
     "babel-jest": "^19.0.0",

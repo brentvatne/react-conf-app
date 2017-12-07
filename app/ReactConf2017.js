@@ -2,7 +2,14 @@
 import React, { Component } from 'react';
 import Expo, { Asset, Constants, Font } from 'expo';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { AppState, Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  AppState,
+  Dimensions,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import { Navigator } from 'react-native-deprecated-custom-components';
 

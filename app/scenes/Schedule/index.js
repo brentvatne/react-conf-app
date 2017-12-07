@@ -222,7 +222,7 @@ export default class Schedule extends Component {
 
     const navbarTop = scrollY.interpolate({
       inputRange: [80, 120],
-      outputRange: [-64, 0],
+      outputRange: [-theme.navbar.height, 0],
       extrapolate: 'clamp',
     });
 

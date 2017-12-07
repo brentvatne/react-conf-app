@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import isIPhoneX from 'react-native-is-iphonex';
 import Icon from '@expo/vector-icons/Ionicons';
 
 import theme from '../../theme';
@@ -114,6 +115,8 @@ export default function Navbar(
   );
 }
 
+const NotchHeight = isIPhoneX ? 20 : 0;
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'stretch',
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
     height: theme.navbar.height,
     overflow: 'hidden',
     justifyContent: 'space-between',
-    paddingTop: Platform.OS === 'ios' ? 20 : 0, // account for the statusbar
+    paddingTop: Platform.OS === 'ios' ? 20 + NotchHeight : NotchHeight, // account for the statusbar
     position: 'absolute',
     width: Dimensions.get('window').width,
   },
